@@ -28,9 +28,9 @@ double sine(double x, int d) {
 
         sign *= -1;
         n += 2;
-
+// the formula for the Taylor series term and the tgamma function
         term = pow(x, n) / tgamma(n + 1); 
-
+// checks if the absolute value of the current term is smaller than the desired threshold
         if (abs(term) < pow(0.1, d))
             break;
     }
