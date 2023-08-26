@@ -1,66 +1,46 @@
 #include <stdio.h>
-#include <stdlib.h> 
 
-int recursiveMin(int a[], int n) {
-    if (n == 1) {
-        return a[0];
-    } else {
-        int minRest = recursiveMin(a, n - 1);
-        return (a[n - 1] < minRest) ? a[n - 1] : minRest;
-    }
-}
+int findFirstOccurrence(int elements[], int size, int target) {
+    int left = 0, right = size - 1;
+    int index = -1;
 
-int countRecursionDepth(int a[], int n) {
-    int depth = 0;
-
-    int recursiveMinWithDepth(int a[], int n) {
-        if (n == 1) {
-            return a[0];
-        } else {
-            depth++;
-            int minRest = recursiveMinWithDepth(a, n - 1);
-            return (a[n - 1] < minRest) ? a[n - 1] : minRest;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (elements[mid] == target) {
+            index = mid;
+            right = mid - 1;
+        }
+        else if (elements[mid] > target) {
+            right = mid - 1;
+        }
+        else {
+            left = mid + 1;
         }
     }
-
-    recursiveMinWithDepth(a, n);
-    return depth;
+    return index;
 }
 
 int main() {
-    int num_sizes;
-    printf("Enter the number of sizes: ");
-    scanf("%d", &num_sizes);
+    int num;
+    printf("Enter the number of elements in an array: ");
+    scanf("%d", &num);
+    int elements[num];
+    
+    printf("Enter the array elements: ");
+    for (int i = 0; i < num; i++) {
+        scanf("%d", &elements[i]);
+    }
 
-    for (int i = 0; i < num_sizes; i++) {
-        int size;
-        printf("Enter size for array %d: ", i + 1);
-        scanf("%d", &size);
+    int target;
+    printf("Enter the target element: ");
+    scanf("%d", &target);
 
-        if (size <= 0) {
-            printf("Invalid size. Please enter a positive integer.\n");
-            i--; 
-            continue;
-        }
-
-        int* input_array = (int*)malloc(size * sizeof(int));
-        if (input_array == NULL) {
-            printf("Memory allocation failed.\n");
-            return 1;
-        }
-
-        for (int j = 0; j < size; j++) {
-            input_array[j] = size - j;
-        }
-
-        int depth = countRecursionDepth(input_array, size);
-        double c1 = (size > 0) ? (double)depth / size : 0;
-
-        printf("\nSize of problem (|a|): %d\n", size);
-        printf("Observed depth of recursion: %d\n", depth);
-        printf("Estimated parameter c1: %lf\n\n", c1);
-
-        free(input_array); 
+    int result = findFirstOccurrence(elements, num, target);
+    if (result == -1) {
+        printf("Target element is not present in the array\n");
+    }
+    else {
+        printf("The first occurrence of the target element is at index: %d\n", result);
     }
 
     return 0;

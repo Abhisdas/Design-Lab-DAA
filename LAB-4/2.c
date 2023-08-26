@@ -1,30 +1,34 @@
 #include <stdio.h>
 
-int guessingGame(int target) {
-    int low = -1000;  
-    int high = 1000;  
-    int guess = 0;          
+int main() {
+    int num;
+    printf("Enter the number of elements in an array: ");
+    scanf("%d", &num);
     
-    while (1) {
-        guess = low + (high - low) / 2;  
-        
-        if (guess == target) {
-            return guess;
-        } else if (guess < target) {
-            printf("Try a bigger number (%d).\n", guess + 1);  
-            low = guess + 1;  
-        } else {
-            printf("Try a smaller number (%d).\n", guess - 1); 
-            high = guess - 1; 
+    int elements[num];
+    printf("Enter the array elements: ");
+    for (int i = 0; i < num; i++) {
+        scanf("%d", &elements[i]);
+    }
+    
+    int target;
+    printf("Enter the target element: ");
+    scanf("%d", &target);
+    
+    int index = -1;
+    for (int i = 0; i < num; i++) {
+        if (elements[i] == target) {
+            index = i;
+            break;
         }
     }
-}
-
-int main() {
-    int target_number ;
-    printf("Enter the number : ");
-    scanf("%d",&target_number);
-    int result = guessingGame(target_number);
-    printf("You got it: %d\n", result);
+    
+    if (index == -1) {
+        printf("Target element is not found in the array\n");
+    }
+    else {
+        printf("Target element is found at index: %d\n", index);
+    }
+    
     return 0;
 }
