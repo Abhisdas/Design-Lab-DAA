@@ -1,65 +1,57 @@
 #include <stdio.h>
-#include <stdbool.h>
-#include<stdlib.h>
 
-int unique(int a[], int n, int result[]) {
-    int idx = 0;
+int comparisons = 0;
+
+int partition(int elements[], int start, int end) {
+    int i = start;
+    int pivot = elements[start];
     
-    for (int i = 0; i < n; i++) {
-        bool isDuplicate = false;
-        
-        for (int j = 0; j < idx; j++) {
-            if (a[i] == result[j]) {
-                isDuplicate = true;
-                break;
-            }
-        }
-        
-        if (!isDuplicate) {
-            result[idx] = a[i];
-            idx++;
+    for (int j = i+1; j <= end; j++) {
+        comparisons++;
+        if (elements[j] <= pivot) {
+            i++;
+            int temp = elements[i];
+            elements[i] = elements[j];
+            elements[j] = temp;
         }
     }
     
-    return idx;
+    int temp = elements[i];
+    elements[i] = elements[start];
+    elements[start] = temp;
+    return i;
+}
+
+void quickSort(int elements[], int start, int end) {
+    if (start < end) {
+        int mid = partition(elements, start, end);
+        quickSort(elements, start, mid-1);
+        quickSort(elements, mid+1, end);
+    }
 }
 
 int main() {
-    int num_sizes;
-    printf("Enter the number of sizes: ");
-    scanf("%d", &num_sizes);
+    int num;
+    printf("Enter size of array: ");
+    scanf("%d", &num);
     
-    int sizes[num_sizes];
-    for (int i = 0; i < num_sizes; i++) {
-        printf("Enter size for array %d: ", i + 1);
-        scanf("%d", &sizes[i]);
+    int elements[num];
+    printf("Enter elements of the array: ");
+    for (int i = 0; i < num; i++) {
+        scanf("%d", &elements[i]);
     }
     
-    for (int i = 0; i < num_sizes; i++) {
-        int size = sizes[i];
-        int input_array[size];
-        
-        for (int j = 0; j < size; j++) {
-            // printf("Enter element %d of array %d: ", j + 1, i + 1);
-            // scanf("%d", &input_array[j]);
+    int start = 0;
+    int end = num - 1;
 
-            input_array[j]=rand();
-        }
-        for (int i = 0; i < size; i++)
-        {
-            printf("%d ",input_array[i]);
-        }
+    quickSort(elements, start, end);
+    
+    printf("Sorted array is: ");
+    for (int i = 0; i <= end; i++) {
         
-        int unique_array[size];  // Assuming worst case where all elements are unique
-        int num_unique = unique(input_array, size, unique_array);
-        int num_operations = size * size;  // Assuming worst case where all elements need to be compared
-        
-        double c1 = (double)num_operations / (size * size);
-        
-        printf("\n\nSize of problem (|a|): %d\n", size);
-        printf("Observed number of basic operations: %d\n", num_operations);
-        printf("Estimated parameter c1: %lf\n\n", c1);
+        printf("%d, ", elements[i]);
     }
+    printf("\nNumber of comparisons: %d\n", comparisons);
     
     return 0;
 }
